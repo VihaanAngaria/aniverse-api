@@ -22,6 +22,6 @@ export class SearchController {
 
     const results = await SearchService.search(parsed.data.q);
 
-    return c.json(results);
+    return success(c, results.results, "sanka");
   }
 }

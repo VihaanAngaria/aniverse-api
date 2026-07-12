@@ -29,7 +29,6 @@ export class EpisodeMapper {
 
     return {
       title: data.title,
-      animeId: data.animeId,
       defaultStream: data.defaultStreamingUrl,
       qualities,
     };

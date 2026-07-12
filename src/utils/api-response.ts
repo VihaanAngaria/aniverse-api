@@ -10,14 +10,16 @@ function normalizeStatus(status: number): ApiStatus {
     : 500;
 }
 
-export function success(
+export function success<T>(
   c: Context,
-  data: unknown,
+  data: T,
+  provider = "unknown",
   status = 200
 ) {
   return c.json(
     {
       success: true,
+      provider,
       data,
     },
     normalizeStatus(status)

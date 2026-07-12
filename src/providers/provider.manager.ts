@@ -6,6 +6,10 @@ export class ProviderManager {
     return new AniListProvider();
   }
 
+  static getAniListProvider() {
+    return new AniListProvider();
+  }
+
   static getSankaProvider() {
     return new SankaProvider();
   }

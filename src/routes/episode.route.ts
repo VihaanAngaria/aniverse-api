@@ -6,9 +6,9 @@ import { z } from "zod";
 const episode = new Hono();
 
 const episodeParamSchema = z.object({
-  slug: z.string().min(1),
+  animeId: z.string().trim().min(1),
 });
 
-episode.get("/:slug", zValidator("param", episodeParamSchema), EpisodeController.list);
+episode.get("/:animeId", zValidator("param", episodeParamSchema), EpisodeController.list);
 
 export default episode;

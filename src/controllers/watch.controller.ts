@@ -1,5 +1,6 @@
 import { Context } from "hono";
 import { WatchService } from "../services/watch.service";
+import { fail, success } from "../utils/api-response";
 
 const service = new WatchService();
 
@@ -8,20 +9,11 @@ export class WatchController {
     const episodeId = c.req.param("episodeId");
 
     if (!episodeId) {
-      return c.json(
-        {
-          success: false,
-          message: "Episode ID is required",
-        },
-        400
-      );
+      return fail(c, "Episode ID is required", 400, "VALIDATION_ERROR");
     }
 
     const data = await service.getWatchData(episodeId);
 
-    return c.json({
-      success: true,
-      data,
-    });
+    return success(c, data, "sanka");
   }
 }

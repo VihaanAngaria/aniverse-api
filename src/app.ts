@@ -10,6 +10,8 @@ import animeRoute from "./routes/anime.route";
 import episodeRoute from "./routes/episode.route";
 import watchRoute from "./routes/watch.route";
 import homeRoute from "./routes/home.route";
+import { HomeController } from "./controllers/home.controller";
+import { AnimeController } from "./controllers/anime.controller";
 
 // Temporary debugging route (will be removed later)
 import sankaRoute from "./routes/sanka.route";
@@ -49,8 +51,17 @@ app.get("/docs", swaggerUI({ url: "/openapi.json" }));
 // ======================================
 app.route("/health", healthRoute);
 app.route("/home", homeRoute);
+app.get("/trending", HomeController.trending);
+app.get("/popular", HomeController.popular);
+app.get("/latest", HomeController.latest);
+app.get("/top", HomeController.top);
+app.get("/genres", HomeController.genres);
+app.get("/schedule", HomeController.schedule);
 app.route("/search", searchRoute);
 app.route("/anime", animeRoute);
+app.get("/recommendations/:id", AnimeController.getRecommendations);
+app.get("/related/:id", AnimeController.getRelated);
+app.get("/characters/:id", AnimeController.getCharacters);
 app.route("/episodes", episodeRoute);
 app.route("/watch", watchRoute);
 

@@ -8,32 +8,48 @@ import type {
   SankaAnimeCard,
   SankaHomeResponse,
 } from "../providers/sanka/type";
+import { resolveAniListImages } from "../utils/anilist-images";
 
 export class HomeMapper {
-  static fromSanka(data: SankaHomeResponse): HomeResponse {
-    const ongoing: OngoingAnime[] =
-      data.ongoing?.animeList?.map(
-        (anime: SankaAnimeCard): OngoingAnime => ({
-          id: anime.animeId,
-          title: anime.title,
-          poster: anime.poster,
-          episodes: anime.episodes ?? 0,
-          releaseDay: anime.releaseDay ?? "",
-          latestReleaseDate: anime.latestReleaseDate ?? "",
-        })
-      ) ?? [];
+  static async fromSanka(data: SankaHomeResponse): Promise<HomeResponse> {
+    const ongoing: OngoingAnime[] = [];
+    const completed: CompletedAnime[] = [];
 
-    const completed: CompletedAnime[] =
-      data.completed?.animeList?.map(
-        (anime: SankaAnimeCard): CompletedAnime => ({
-          id: anime.animeId,
-          title: anime.title,
-          poster: anime.poster,
-          episodes: anime.episodes ?? 0,
-          score: anime.score ? Number(anime.score) : null,
-          lastReleaseDate: anime.lastReleaseDate ?? "",
-        })
-      ) ?? [];
+    const ongoingCards = data.ongoing?.animeList ?? [];
+    const completedCards = data.completed?.animeList ?? [];
+
+    for (const anime of ongoingCards) {
+      const images = await resolveAniListImages(anime.title, anime.poster);
+      ongoing.push({
+        id: anime.animeId,
+        title: anime.title,
+        poster: images.poster,
+        type: "Unknown",
+        episodes: anime.episodes ?? 0,
+        status: "Unknown",
+        score: anime.score ? Number(anime.score) : null,
+        year: 0,
+        provider: "sanka",
+        releaseDay: anime.releaseDay ?? "",
+        latestReleaseDate: anime.latestReleaseDate ?? "",
+      });
+    }
+
+    for (const anime of completedCards) {
+      const images = await resolveAniListImages(anime.title, anime.poster);
+      completed.push({
+        id: anime.animeId,
+        title: anime.title,
+        poster: images.poster,
+        type: "Unknown",
+        episodes: anime.episodes ?? 0,
+        status: "Completed",
+        score: anime.score ? Number(anime.score) : null,
+        year: 0,
+        provider: "sanka",
+        lastReleaseDate: anime.lastReleaseDate ?? "",
+      });
+    }
 
     return {
       ongoing,

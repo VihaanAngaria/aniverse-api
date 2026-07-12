@@ -10,7 +10,6 @@ export interface StreamQuality {
 
 export interface WatchResponse {
   title: string;
-  animeId: string;
   defaultStream: string;
   qualities: StreamQuality[];
 }

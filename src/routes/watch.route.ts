@@ -6,7 +6,7 @@ import { z } from "zod";
 const watch = new Hono();
 
 const watchParamSchema = z.object({
-  episodeId: z.string().min(1),
+  episodeId: z.string().trim().min(1),
 });
 
 watch.get("/:episodeId", zValidator("param", watchParamSchema), WatchController.watch);
