@@ -1,4 +1,4 @@
-import { Anime } from "./anime";
+import type { Anime } from "./anime";
 
 export interface SearchResponse {
   success: boolean;

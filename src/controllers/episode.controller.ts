@@ -1,5 +1,6 @@
-import { Context } from "hono";
+import type { Context } from "hono";
 import { EpisodeService } from "../services/episode.service";
+import { success, fail } from "../utils/api-response";
 
 const service = new EpisodeService();
 
@@ -8,20 +9,16 @@ export class EpisodeController {
     const slug = c.req.param("slug");
 
     if (!slug) {
-      return c.json(
-        {
-          success: false,
-          message: "Episode slug is required",
-        },
-        400
+      return fail(
+        c,
+        "Episode slug is required",
+        400,
+        "VALIDATION_ERROR"
       );
     }
 
     const episodes = await service.getEpisodes(slug);
 
-    return c.json({
-      success: true,
-      data: episodes,
-    });
+    return success(c, episodes);
   }
 }

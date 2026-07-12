@@ -1,31 +1,29 @@
+import type { AnimeDetails } from "../types/anime-details";
+
+import type {
+  SankaAnimeResponse,
+  SankaEpisodeItem,
+  SankaGenre,
+} from "../providers/sanka/type";
+
 export class AnimeMapper {
-  static fromSanka(slug: string, anime: any) {
+  static fromSanka(
+    slug: string,
+    anime: SankaAnimeResponse
+  ): AnimeDetails {
     return {
       id: slug,
-
       title: anime.title,
-
+      description: anime.synopsis?.paragraphs?.join(" ") ?? "",
       poster: anime.poster,
-
-      score: anime.score ? Number(anime.score) : null,
-
+      banner: anime.poster,
+      episodes: anime.episodeList?.length ?? 0,
       status: anime.status,
-
-      type: anime.type,
-
-      episodes:
-        anime.episodeList?.map((ep: any) => ({
-          id: ep.episodeId,
-          number: ep.eps,
-          title: ep.title,
-          date: ep.date,
-        })) ?? [],
-
-      genres:
-        anime.genreList?.map((genre: any) => ({
-          id: genre.genreId,
-          name: genre.title,
-        })) ?? [],
+      genres: anime.genreList?.map((genre: SankaGenre) => genre.title) ?? [],
+      score: anime.score ? Number(anime.score) : 0,
+      season: "",
+      year: 0,
+      studios: [],
     };
   }
 }

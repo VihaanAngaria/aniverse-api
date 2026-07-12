@@ -8,7 +8,7 @@ export class SankaService {
 
   async getHome() {
     const response = await this.provider.getHome();
-    return HomeMapper.fromSanka(response.data);
+    return HomeMapper.fromSanka(response);
   }
 
   async search(keyword: string) {
@@ -26,12 +26,12 @@ export class SankaService {
   async getAnime(slug: string) {
     const response = await this.provider.getAnime(slug);
 
-    return AnimeMapper.fromSanka(slug, response.data);
+    return AnimeMapper.fromSanka(slug, response);
   }
 
   async getEpisode(slug: string) {
     const response = await this.provider.getEpisode(slug);
 
-    return EpisodeMapper.fromSanka(response.data);
+    return EpisodeMapper.fromSanka(response);
   }
 }

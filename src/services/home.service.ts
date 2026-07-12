@@ -1,20 +1,19 @@
 import { ProviderManager } from "../providers/provider.manager";
-import { EpisodeMapper } from "../mappers/episode.mapper";
+import { HomeMapper } from "../mappers/home.mapper";
 import { cache } from "../utils/cache";
 
-export class WatchService {
+export class HomeService {
   private provider = ProviderManager.getSankaProvider();
 
-  async getWatchData(episodeId: string) {
-    const cacheKey = `watch:${episodeId}`;
+  async getHome() {
+    const cacheKey = "home";
     const cached = cache.get(cacheKey);
     if (cached) {
       return cached;
     }
 
-    const response = await this.provider.getEpisode(episodeId);
-    const result = EpisodeMapper.fromSanka(response);
-
+    const response = await this.provider.getHome();
+    const result = HomeMapper.fromSanka(response);
     cache.set(cacheKey, result, 300);
     return result;
   }

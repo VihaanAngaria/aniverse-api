@@ -1,21 +1,26 @@
 import type { Context } from "hono";
 import { SearchService } from "../services/search.service";
+import { SearchQuerySchema } from "../validators/search.validator";
+import { success, fail } from "../utils/api-response";
 
 export class SearchController {
   static async search(c: Context) {
-    const query = c.req.query("q");
+    const parsed = SearchQuerySchema.safeParse({
+      q: c.req.query("q"),
+    });
 
-    if (!query) {
-      return c.json(
-        {
-          success: false,
-          message: "Missing search query",
-        },
-        400
+    if (!parsed.success) {
+      const message = parsed.error.issues[0]?.message ?? "Invalid search query";
+
+      return fail(
+        c,
+        message,
+        400,
+        "VALIDATION_ERROR"
       );
     }
 
-    const results = await SearchService.search(query);
+    const results = await SearchService.search(parsed.data.q);
 
     return c.json(results);
   }
