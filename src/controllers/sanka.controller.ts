@@ -1,29 +1,40 @@
 import { Context } from "hono";
-import { SankaProvider } from "../providers/sanka/sanka.provider";
+import { SankaService } from "../services/sanka.service";
 
-const sanka = new SankaProvider();
+const service = new SankaService();
 
 export class SankaController {
   static async home(c: Context) {
-    const data = await sanka.getHome();
-    return c.json(data);
+    return c.json({
+      success: true,
+      data: await service.getHome(),
+    });
   }
 
   static async search(c: Context) {
     const keyword = c.req.param("keyword");
-    const data = await sanka.search(keyword);
-    return c.json(data);
+
+    return c.json({
+      success: true,
+      data: await service.search(keyword),
+    });
   }
 
   static async anime(c: Context) {
     const slug = c.req.param("slug");
-    const data = await sanka.getAnime(slug);
-    return c.json(data);
+
+    return c.json({
+      success: true,
+      data: await service.getAnime(slug),
+    });
   }
 
   static async episode(c: Context) {
     const slug = c.req.param("slug");
-    const data = await sanka.getEpisode(slug);
-    return c.json(data);
+
+    return c.json({
+      success: true,
+      data: await service.getEpisode(slug),
+    });
   }
 }
