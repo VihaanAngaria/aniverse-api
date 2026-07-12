@@ -1,7 +1,9 @@
 import axios from "axios";
+
 import type { AnimeProvider } from "../provider.interface";
 import type { SearchResponse } from "../../types/search";
-import { SEARCH_QUERY } from "./queries";
+import type { AnimeDetails } from "../../types/anime-details";
+
 import { SEARCH_QUERY, ANIME_QUERY } from "./queries";
 
 export class AniListProvider implements AnimeProvider {
@@ -44,7 +46,7 @@ export class AniListProvider implements AnimeProvider {
       {
         query: ANIME_QUERY,
         variables: {
-          id: parseInt(id),
+          id: Number(id),
         },
       },
       {
@@ -60,16 +62,16 @@ export class AniListProvider implements AnimeProvider {
     return {
       id: String(anime.id),
       title: anime.title.english || anime.title.romaji,
-      description: anime.description,
+      description: anime.description || "",
       poster: anime.coverImage.extraLarge,
-      banner: anime.bannerImage,
+      banner: anime.bannerImage || "",
       episodes: anime.episodes || 0,
       status: anime.status || "Unknown",
       genres: anime.genres || [],
       score: anime.averageScore || 0,
       season: anime.season || "Unknown",
       year: anime.seasonYear || 0,
-      studios: anime.studios.nodes.map((node: any) => node.name) || [],
+      studios: anime.studios.nodes.map((studio: any) => studio.name),
     };
   }
 }

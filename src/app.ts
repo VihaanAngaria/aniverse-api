@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import healthRoute from "./routes/health.route";
 import searchRoute from "./routes/search.route";
+import animeRoute from "./routes/anime.route";
 
 export const app = new Hono();
 
@@ -14,3 +15,4 @@ app.get("/", (c) => {
 
 app.route("/health", healthRoute);
 app.route("/search", searchRoute);
+app.route("/anime", animeRoute);
